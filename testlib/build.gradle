@@ -1,0 +1,40 @@
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+group = 'org.gradle.sample'
+version = '1.5'
+
+publishing {
+
+
+    repositories {
+        maven {
+            name 'Dev'
+            credentials {
+                username 'admin'
+                password 'admin123'
+            }
+
+            // change to point to your repo, e.g. http://my.org/repo
+            url "http://10.7.0.217:8082/nexus/content/repositories/snapshots/"
+
+        }
+    }
+
+    publications {
+        mavenJava(MavenPublication) {
+            groupId 'org.gradle.sample'
+            artifactId 'project1-sample'
+            version '1.5-SNAPSHOT'
+
+            from components.java
+            ext.repo = 'Dev'
+        }
+    }
+}
