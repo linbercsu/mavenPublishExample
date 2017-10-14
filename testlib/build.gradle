@@ -7,15 +7,19 @@ dependencies {
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
+
+ext {
+    libVersion = '1.6'
+}
 group = 'org.gradle.sample'
-version = '1.5'
+version = project.ext.libVersion
 
 publishing {
 
 
     repositories {
         maven {
-            name 'Dev'
+            name 'Snapshot'
             credentials {
                 username 'admin'
                 password 'admin123'
@@ -25,16 +29,37 @@ publishing {
             url "http://10.7.0.217:8082/nexus/content/repositories/snapshots/"
 
         }
+
+        maven {
+            name 'Release'
+            credentials {
+                username 'admin'
+                password 'admin123'
+            }
+
+            // change to point to your repo, e.g. http://my.org/repo
+            url "http://10.7.0.217:8082/nexus/content/repositories/releases/"
+
+        }
     }
 
     publications {
-        mavenJava(MavenPublication) {
+        mavenSnapshot(MavenPublication) {
             groupId 'org.gradle.sample'
             artifactId 'project1-sample'
-            version '1.5-SNAPSHOT'
+            version "${project.ext.libVersion}-SNAPSHOT"
 
             from components.java
-            ext.repo = 'Dev'
+            ext.repo = 'Snapshot'
+        }
+
+        mavenRelease(MavenPublication) {
+            groupId 'org.gradle.sample'
+            artifactId 'project1-sample'
+            version project.ext.libVersion
+
+            from components.java
+            ext.repo = 'Release'
         }
     }
 }
