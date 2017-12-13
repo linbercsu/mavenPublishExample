@@ -38,8 +38,13 @@ publishing {
             artifact("$buildDir/outputs/aar/mylibrary-debug.aar")
 
             pom.withXml {
-                asNode().appendNode('description',
+                def node = node()
+                node.appendNode('description',
                         'A demonstration of maven POM customization')
+                def de = node.appendNode('dependencies').appendNode('dependency')
+                de.appendNode('groupId', 'com.android.support')
+                de.appendNode('artifactId', 'appcompat-v7')
+                de.appendNode('version', '25.3.1')
             }
         }
     }
